@@ -1,0 +1,1114 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "eBay Export",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Brand Name",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Folder Name (Optional)"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        -120,
+        40
+      ],
+      "id": "a27813f4-69b9-4989-9ddc-b7c5a8b54a33",
+      "name": "On form submission",
+      "webhookId": "5a98dbb0-ef6d-4d9b-91e8-583a3e29a626"
+    },
+    {
+      "parameters": {
+        "jsCode": "const brandName = $input.first().json[\"Brand Name\"];\nconst folderName = $input.first().json[\"Folder Name (Optional)\"];\n\nreturn [{\n  json: {\n    brandName: brandName,\n    folderName: folderName || null,\n    searchQuery: brandName\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -20,
+        -200
+      ],
+      "id": "f00f5f91-23cc-4b53-97ca-692a772287d6",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "={{ $json.searchQuery }}",
+        "returnAll": true,
+        "filter": {
+          "whatToSearch": "folders"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        80,
+        240
+      ],
+      "id": "20caf7ef-2e96-492f-ade6-b25c941905b2",
+      "name": "Google Drive",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "ZgWDX2PS5C49Xi8U",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "returnAll": true,
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $json.id }}",
+            "mode": "id"
+          },
+          "whatToSearch": "folders"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        180,
+        -200
+      ],
+      "id": "4b4a9c79-56b0-4487-a22e-7e57c4ec14df",
+      "name": "Google Drive1",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "ZgWDX2PS5C49Xi8U",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "returnAll": true,
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $json.id }}",
+            "mode": "id"
+          },
+          "whatToSearch": "folders"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        280,
+        240
+      ],
+      "id": "6e766ba8-8a77-4679-893c-b6b26fce644b",
+      "name": "Google Drive2",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "ZgWDX2PS5C49Xi8U",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "73a84564-5b48-4de3-bc86-1caab8106fce",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "^\\d",
+              "operator": {
+                "type": "string",
+                "operation": "regex"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        380,
+        -200
+      ],
+      "id": "24e9f412-c3a1-41e7-b9e4-e9f9e3535977",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "returnAll": true,
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $json.id }}",
+            "mode": "id"
+          },
+          "whatToSearch": "folders"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        480,
+        240
+      ],
+      "id": "f2ca08a7-97ac-44ed-989e-358016d8d8d5",
+      "name": "Google Drive3",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "ZgWDX2PS5C49Xi8U",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "728252f6-060a-42a0-9a6c-574faf683ec1",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "^\\d",
+              "operator": {
+                "type": "string",
+                "operation": "regex"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        580,
+        -200
+      ],
+      "id": "fb7f2893-6c39-4c59-8f1d-be95788104d7",
+      "name": "Filter1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Gelen SKU klasörlerini al\nconst skuFolders = $input.all();\n\n// Google Drive2'den part number klasörlerini al (bunlar parent klasörler)\nconst partNumberFolders = $('Google Drive2').all();\n\n// Form'dan gelen opsiyonel klasör adını al\nconst formData = $('Code').first().json;\nconst filterFolder = formData.folderName;\n\n// Her SKU için gerekli bilgileri hazırla\nlet results = skuFolders.map(item => {\n  const skuFolder = item.json;\n  \n  // Klasör adından bilgileri çıkar\n  const folderName = skuFolder.name;\n  \n  // parentPartNumber: ilk rakamlar (örn: 12602221)\n  const parentPartNumber = folderName.match(/^\\d+/)?.[0] || folderName;\n  \n  // Parent klasör ID'sini bul (Google Drive2'den)\n  const parentFolder = partNumberFolders.find(f => f.json.name === parentPartNumber);\n  const parentFolderId = parentFolder ? parentFolder.json.id : null;\n  \n  return {\n    json: {\n      skuFolderId: skuFolder.id,\n      skuFolderName: folderName,\n      partNumber: folderName,\n      parentPartNumber: parentPartNumber,\n      parentFolderId: parentFolderId,\n      sku: folderName,\n      modelNumber: folderName\n    }\n  };\n});\n\n// Eğer opsiyonel klasör adı girildiyse, sadece o klasörü filtrele\nif (filterFolder && filterFolder.trim() !== '') {\n  results = results.filter(item => \n    item.json.parentPartNumber === filterFolder.trim() || \n    item.json.partNumber === filterFolder.trim()\n  );\n}\n\nreturn results;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        680,
+        240
+      ],
+      "id": "16b6d304-d599-431a-b7dd-a7975c7504f9",
+      "name": "Code1"
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "=content",
+        "returnAll": true,
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $json.skuFolderId }}",
+            "mode": "id"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        980,
+        -200
+      ],
+      "id": "942854de-2f6d-4ffb-8e79-2ebca8ab1074",
+      "name": "Google Drive4",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "ZgWDX2PS5C49Xi8U",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1080,
+        240
+      ],
+      "id": "243aa843-0fa0-4511-85b8-2c46b2d23e5c",
+      "name": "Google Drive5",
+      "executeOnce": false,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "ZgWDX2PS5C49Xi8U",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const mammoth = require('mammoth');\n\n// Google Drive5'ten gelen TÜM dosyaları al\nconst allDownloads = $('Google Drive5').all();\n\n// Code8'den gelen TÜM SKU bilgilerini al\nconst allSkuData = $('Code8').all();\n\n// Her dosya için ayrı ayrı işle\nconst processFile = async (downloadItem, skuData) => {\n  const binaryKeys = Object.keys(downloadItem.binary || {});\n  if (binaryKeys.length === 0) return null;\n  \n  const binaryKey = binaryKeys[0];\n  const binaryData = downloadItem.binary[binaryKey];\n  \n  if (!binaryData || !binaryData.data) return null;\n  \n  const buffer = Buffer.from(binaryData.data, 'base64');\n  const result = await mammoth.extractRawText({ buffer: buffer });\n  const text = result.value;\n  \n  let title = '';\n  let bulletPoints = '';\n  let description = '';\n  let genericKeywords = '';\n  \n  const titleMatch = text.match(/TITLE:\\s*([\\s\\S]*?)(?=BULLET POINTS:|$)/i);\n  const bulletMatch = text.match(/BULLET POINTS:\\s*([\\s\\S]*?)(?=DESCRIPTION:|$)/i);\n  const descMatch = text.match(/DESCRIPTION:\\s*([\\s\\S]*?)(?=GENERIC KEYWORDS:|$)/i);\n  const keywordsMatch = text.match(/GENERIC KEYWORDS:\\s*([\\s\\S]*?)$/i);\n  \n  if (titleMatch) title = titleMatch[1].trim();\n  if (bulletMatch) bulletPoints = bulletMatch[1].trim();\n  if (descMatch) description = descMatch[1].trim();\n  if (keywordsMatch) genericKeywords = keywordsMatch[1].trim();\n  \n  return {\n    json: {\n      skuFolderId: skuData.skuFolderId,\n      partNumber: skuData.partNumber,\n      parentPartNumber: skuData.parentPartNumber,\n      parentFolderId: skuData.parentFolderId,\n      sku: skuData.sku,\n      modelNumber: skuData.modelNumber,\n      title: title,\n      bulletPoints: bulletPoints,\n      description: description,\n      genericKeywords: genericKeywords,\n      ebayDescription: bulletPoints + '\\n\\n' + description\n    }\n  };\n};\n\n// Tüm dosyaları paralel işle\nconst promises = allDownloads.map((downloadItem, i) => {\n  const skuData = allSkuData[i]?.json || allSkuData[0]?.json;\n  return processFile(downloadItem, skuData);\n});\n\nconst results = await Promise.all(promises);\n\n// null olanları filtrele\nreturn results.filter(r => r !== null);"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1180,
+        0
+      ],
+      "id": "4d4dbfce-80d6-405c-9a65-2f3dfc82ff31",
+      "name": "Code2"
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "returnAll": true,
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $json.skuFolderId }}",
+            "mode": "id"
+          },
+          "whatToSearch": "files"
+        },
+        "options": {
+          "fields": [
+            "*"
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1280,
+        240
+      ],
+      "id": "4545e068-cf84-4891-8f83-f1021d1c5608",
+      "name": "Google Drive6",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "ZgWDX2PS5C49Xi8U",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "11a5fa21-7c14-4062-924a-c7619bc07d26",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "\\.(jpg|jpeg|png|gif)$",
+              "operator": {
+                "type": "string",
+                "operation": "regex"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        1440,
+        240
+      ],
+      "id": "0a5f7658-d893-41ad-8dd8-b858cb70729c",
+      "name": "Filter2"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Merge'den gelen tüm görselleri al\nconst allInputImages = $input.all();\n\n// Code2'den TÜM SKU verilerini al\nconst allContentData = $('Code2').all();\n\n// Filter2 ve Filter3'ten görselleri al\nconst filter2Images = $('Filter2').all();\nconst filter3Images = $('Filter3').all();\n\n// Her SKU için sonuç oluştur\nconst results = [];\n\nfor (const contentItem of allContentData) {\n  const contentData = contentItem.json;\n  const skuFolderId = contentData.skuFolderId;\n  const parentFolderId = contentData.parentFolderId;\n  \n  // Bu SKU'nun kendi klasöründeki görselleri bul (Filter2'den)\n  const skuImages = filter2Images.filter(img => {\n    return img.json.parents && img.json.parents.includes(skuFolderId);\n  }).map(img => ({\n    id: img.json.id,\n    name: img.json.name,\n    source: 'sku'\n  }));\n  \n  // Bu SKU'nun parent klasöründeki görselleri bul (Filter3'ten)\n  const parentImages = filter3Images.filter(img => {\n    return img.json.parents && img.json.parents.includes(parentFolderId);\n  }).map(img => ({\n    id: img.json.id,\n    name: img.json.name,\n    source: 'parent'\n  }));\n  \n  // Tüm görselleri birleştir (önce parent, sonra sku)\n  const allImages = [...parentImages, ...skuImages];\n  \n  // Duplicate isimleri kaldır\n  const uniqueImages = [];\n  const seenNames = new Set();\n  for (const img of allImages) {\n    const lowerName = img.name.toLowerCase();\n    if (!seenNames.has(lowerName)) {\n      seenNames.add(lowerName);\n      uniqueImages.push(img);\n    }\n  }\n  \n  // Görselleri sırala\n  const sortedImages = uniqueImages.sort((a, b) => {\n    const aName = a.name.toLowerCase();\n    const bName = b.name.toLowerCase();\n    \n    const aNumMatch = aName.match(/^(\\d+)/);\n    const bNumMatch = bName.match(/^(\\d+)/);\n    const aStdMatch = aName.match(/^std(\\d+)/i);\n    const bStdMatch = bName.match(/^std(\\d+)/i);\n    \n    const aIsNum = aNumMatch && !aStdMatch;\n    const bIsNum = bNumMatch && !bStdMatch;\n    \n    if (aIsNum && !bIsNum) return -1;\n    if (!aIsNum && bIsNum) return 1;\n    \n    if (aIsNum && bIsNum) {\n      return parseInt(aNumMatch[1]) - parseInt(bNumMatch[1]);\n    }\n    \n    if (aStdMatch && !bStdMatch) return -1;\n    if (!aStdMatch && bStdMatch) return 1;\n    \n    if (aStdMatch && bStdMatch) {\n      return parseInt(aStdMatch[1]) - parseInt(bStdMatch[1]);\n    }\n    \n    return aName.localeCompare(bName);\n  });\n  \n  // Google Drive public link oluştur\n  const imageUrls = sortedImages.map(img =>\n    `https://drive.google.com/uc?export=view&id=${img.id}`\n  );\n  \n  results.push({\n    json: {\n      ...contentData,\n      imageCount: imageUrls.length,\n      imageUrls: imageUrls,\n      picURL1: imageUrls[0] || '',\n      picURL2: imageUrls[1] || '',\n      picURL3: imageUrls[2] || '',\n      picURL4: imageUrls[3] || '',\n      picURL5: imageUrls[4] || '',\n      picURL6: imageUrls[5] || '',\n      picURL7: imageUrls[6] || '',\n      picURL8: imageUrls[7] || '',\n      picURL9: imageUrls[8] || '',\n      picURL10: imageUrls[9] || '',\n      picURL11: imageUrls[10] || '',\n      picURL12: imageUrls[11] || '',\n      picURL13: imageUrls[12] || '',\n      picURL14: imageUrls[13] || '',\n      picURL15: imageUrls[14] || '',\n      picURL16: imageUrls[15] || '',\n      picURL17: imageUrls[16] || '',\n      picURL18: imageUrls[17] || '',\n      picURL19: imageUrls[18] || '',\n      picURL20: imageUrls[19] || '',\n      picURL21: imageUrls[20] || '',\n      picURL22: imageUrls[21] || '',\n      picURL23: imageUrls[22] || '',\n      picURL24: imageUrls[23] || ''\n    }\n  });\n}\n\nreturn results;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1640,
+        -200
+      ],
+      "id": "faff06f0-902e-4964-aaa5-16c02621de8a",
+      "name": "Code3"
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "returnAll": true,
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $json.parentFolderId }}",
+            "mode": "id"
+          },
+          "whatToSearch": "files"
+        },
+        "options": {
+          "fields": [
+            "*"
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1280,
+        -200
+      ],
+      "id": "430fcfe1-0526-4e9e-8479-90bf038807e9",
+      "name": "Google Drive7",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "ZgWDX2PS5C49Xi8U",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b6bef217-6429-40af-b9d4-3ca392cec4a6",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "\\.(jpg|jpeg|png|gif)$",
+              "operator": {
+                "type": "string",
+                "operation": "regex"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        1440,
+        -200
+      ],
+      "id": "1959eac1-6c79-4951-bdd9-7241674d6704",
+      "name": "Filter3"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1Z3Y4yHiAB9OduS6XFTw42Q999h602vMWA-twr9xZdE4",
+          "mode": "list",
+          "cachedResultName": "price",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Z3Y4yHiAB9OduS6XFTw42Q999h602vMWA-twr9xZdE4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Z3Y4yHiAB9OduS6XFTw42Q999h602vMWA-twr9xZdE4/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1840,
+        -200
+      ],
+      "id": "d992f7b4-73f0-47e7-a3cb-64c586b62f8d",
+      "name": "Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "HtXFaHMfepd7tPOr",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Price verilerini al\nconst priceRows = $input.all();\n\n// Code10'dan TÜM ürün verilerini al\nconst allProductData = $('Code10').all();\n\nconst results = [];\n\nfor (const productItem of allProductData) {\n  const productData = productItem.json;\n  \n  // parentPartNumber'a göre fiyatı bul\n  const parentPartNumber = productData.parentPartNumber;\n  \n  let price = '';\n  for (const row of priceRows) {\n    const rowData = row.json;\n    \n    if (rowData.part_number && rowData.part_number.toString() === parentPartNumber) {\n      price = rowData.price;\n      break;\n    }\n  }\n  \n  results.push({\n    json: {\n      ...productData,\n      price: price || '0'\n    }\n  });\n}\n\nreturn results;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1940,
+        240
+      ],
+      "id": "8833245b-62ae-4e5b-a3ee-1d0eab5acbef",
+      "name": "Code4"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1VlPU3b8VoTxBR4FQ1HsUrR9ipjLYCacNwifAEkQOau4",
+          "mode": "list",
+          "cachedResultName": "ebay category id",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VlPU3b8VoTxBR4FQ1HsUrR9ipjLYCacNwifAEkQOau4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VlPU3b8VoTxBR4FQ1HsUrR9ipjLYCacNwifAEkQOau4/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        2040,
+        -200
+      ],
+      "id": "e1392866-89cd-41d2-a015-4b525cf1599e",
+      "name": "Google Sheets1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "HtXFaHMfepd7tPOr",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Category verilerini al\nconst categoryRows = $input.all();\n\n// Code4'ten TÜM ürün verilerini al\nconst allProductData = $('Code4').all();\n\nconst results = [];\n\nfor (const productItem of allProductData) {\n  const productData = productItem.json;\n  const parentPartNumber = productData.parentPartNumber;\n  \n  // Part number'a göre kategori belirle\n  let categoryName = '';\n  if (parentPartNumber.startsWith('126')) {\n    categoryName = 'wiper blade';\n  } else if (parentPartNumber.startsWith('182')) {\n    categoryName = 'power window switch';\n  } else {\n    categoryName = 'wiper blade'; // varsayılan\n  }\n  \n  let categoryId = '';\n  for (const row of categoryRows) {\n    const rowData = row.json;\n    \n    if (rowData.category && rowData.category.toLowerCase() === categoryName.toLowerCase()) {\n      categoryId = rowData['ebay category id'];\n      break;\n    }\n  }\n  \n  results.push({\n    json: {\n      ...productData,\n      categoryName: categoryName,\n      categoryId: categoryId || ''\n    }\n  });\n}\n\nreturn results;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2140,
+        240
+      ],
+      "id": "93d4f138-6a7f-4817-9eb1-00976ea926f7",
+      "name": "Code5"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4.1-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Create an eBay product title (MAXIMUM 80 characters) for this auto part:\n\nOriginal Title: {{ $json.title }}\nCategory: {{ $json.categoryName }}\nPart Number: {{ $json.partNumber }}\n\nRequirements:\n- Must be 80 characters or less\n- Keep the inch size (e.g., 12\") from original title\n- Use \"Compatible\" before vehicle info (e.g., \"Compatible Honda Civic 2016-2021\")\n- Keep the most important keywords\n- Make it SEO-friendly for eBay search\n\nReturn ONLY the title, nothing else."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.7,
+      "position": [
+        2240,
+        -200
+      ],
+      "id": "812e68c3-5ed4-43a7-b40f-281be2556e68",
+      "name": "OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "uhanLcB0ZGJ9PexJ",
+          "name": "OpenAi account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// OpenAI'dan gelen TÜM eBay title'ları al\nconst allOpenAIResponses = $input.all();\n\n// Code5'ten TÜM ürün verilerini al\nconst allProductData = $('Code5').all();\n\nconst results = [];\n\nfor (let i = 0; i < allOpenAIResponses.length; i++) {\n  const openAIResponse = allOpenAIResponses[i].json;\n  const ebayTitle = openAIResponse.message.content;\n  \n  const productData = allProductData[i]?.json || allProductData[0]?.json;\n  \n  results.push({\n    json: {\n      ...productData,\n      ebayTitle: ebayTitle\n    }\n  });\n}\n\nreturn results;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2320,
+        240
+      ],
+      "id": "83cb46e2-df23-40c4-abf6-5fe2b4d4da3c",
+      "name": "Code6"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Code6'dan TÜM ürün verilerini al\nconst allProductData = $input.all();\n\nconst results = [];\n\nfor (const productItem of allProductData) {\n  const productData = productItem.json;\n  \n  // Fotoğrafları | ile birleştir (eBay formatı)\n  const picUrls = [];\n  for (let i = 1; i <= 24; i++) {\n    const url = productData[`picURL${i}`];\n    if (url && url !== '') {\n      picUrls.push(url);\n    }\n  }\n  const itemPhotoURL = picUrls.join('|');\n  \n  // Description'daki satır kırılımlarını <br> ile değiştir (HTML formatı)\n  const description = (productData.ebayDescription || '')\n    .replace(/\\n\\n/g, '<br><br>')\n    .replace(/\\n/g, '<br>');\n  \n  // eBay CSV formatında veri oluştur (şablondaki 11 kolon)\n  const csvRow = {\n    \"Action(SiteID=US|Country=US|Currency=USD|Version=1193|CC=UTF-8)\": \"Draft\",\n    \"Custom label (SKU)\": productData.sku,\n    \"Category ID\": productData.categoryId,\n    \"Title\": productData.ebayTitle,\n    \"Condition ID\": \"1000\",\n    \"Item photo URL\": itemPhotoURL,\n    \"Quantity\": \"0\",\n    \"Start price\": productData.price,\n    \"Item description\": description,\n    \"Format\": \"FixedPrice\",\n    \"Duration\": \"GTC\"\n  };\n  \n  results.push({\n    json: csvRow\n  });\n}\n\nreturn results;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2420,
+        40
+      ],
+      "id": "45479f43-dd88-46ea-b90a-682a9414ccbb",
+      "name": "Code7"
+    },
+    {
+      "parameters": {
+        "name": "={{ $binary.data.fileName }}",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "1EilztArRX4PJuEJbEg79Vh-QrvHVqmze",
+          "mode": "list",
+          "cachedResultName": "eBay",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1EilztArRX4PJuEJbEg79Vh-QrvHVqmze"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        2620,
+        -200
+      ],
+      "id": "4553f5f4-2d66-4c4c-af51-d69aaae2e34a",
+      "name": "Google Drive8",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "ZgWDX2PS5C49Xi8U",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        1540,
+        20
+      ],
+      "id": "f2eb88b9-d3ae-4eaa-9e84-2751b3a89f1c",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "_exported.txt",
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $json.skuFolderId }}",
+            "mode": "id"
+          },
+          "whatToSearch": "files"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        780,
+        -200
+      ],
+      "id": "fcc02133-a678-4f66-b46f-0dbd9a473701",
+      "name": "Google Drive10",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "ZgWDX2PS5C49Xi8U",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Gelen _exported.txt arama sonuçlarını al\nconst exportedFiles = $input.all();\n\n// Code1'den gelen TÜM SKU bilgilerini al\nconst allSkuData = $('Code1').all();\n\n// Sonuçları topla\nconst results = [];\n\nfor (const skuItem of allSkuData) {\n  const skuData = skuItem.json;\n  \n  // Bu SKU'nun klasöründe _exported.txt var mı kontrol et\n  // Not: Google Drive10 tüm SKU'lar için arama yapıyor, \n  // ama hangi klasörde bulunduğunu bilmiyoruz\n  // Şimdilik basit kontrol - eğer hiç _exported.txt yoksa tüm SKU'ları geçir\n  \n  let hasExported = false;\n  \n  // _exported.txt dosyalarını kontrol et\n  for (const file of exportedFiles) {\n    if (file.json.name && file.json.name.toLowerCase() === '_exported.txt') {\n      // Bu dosya hangi klasörde? parents bilgisine bakalım\n      // Eğer parents bilgisi yoksa, genel kontrol yap\n      hasExported = true;\n      break;\n    }\n  }\n  \n  if (!hasExported) {\n    results.push({ json: skuData });\n  }\n}\n\n// Eğer hiç sonuç yoksa ve _exported.txt de yoksa, tüm SKU'ları döndür\nif (results.length === 0 && exportedFiles.length === 0) {\n  return allSkuData.map(item => ({ json: item.json }));\n}\n\nreturn results.length > 0 ? results : allSkuData.map(item => ({ json: item.json }));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        880,
+        240
+      ],
+      "id": "c306d1d8-122d-48f5-9356-fded3b4611b7",
+      "name": "Code8"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Code7'den TÜM verileri al\nconst allData = $input.all();\n\n// Debug - kaç item geldi?\nconst itemCount = allData.length;\n\n// Eğer 1 item geldiyse, Code7'den direkt çekelim\nlet dataToProcess = allData;\nif (itemCount === 1) {\n  dataToProcess = $('Code7').all();\n}\n\n// CSV satırları (COMMA-separated)\nconst rows = [];\n\n// Satır 1\nrows.push('#INFO,Version=0.0.2,Template= eBay-draft-listings-template_US,,,,,,,,');\n\n// Satır 2\nrows.push('#INFO Action and Category ID are required fields. 1) Set Action to Draft 2) Please find the category ID for your listings here: https://pages.ebay.com/sellerinformation/news/categorychanges.html,,,,,,,,,,');\n\n// Satır 3\nrows.push('\"#INFO After you\\'ve successfully uploaded your draft from the Seller Hub Reports tab, complete your drafts to active listings here: https://www.ebay.com/sh/lst/drafts\",,,,,,,,,,');\n\n// Satır 4\nrows.push('#INFO,,,,,,,,,,');\n\n// Satır 5 - Header\nrows.push('Action(SiteID=US|Country=US|Currency=USD|Version=1193|CC=UTF-8),Custom label (SKU),Category ID,Title,UPC,Price,Quantity,Item photo URL,Condition ID,Description,Format');\n\n// CSV escape fonksiyonu\nconst escapeCSV = (val) => {\n  if (!val) return '';\n  const str = String(val);\n  if (str.includes(',') || str.includes('\"') || str.includes('\\n')) {\n    return '\"' + str.replace(/\"/g, '\"\"') + '\"';\n  }\n  return str;\n};\n\n// Her ürün için data satırı ekle\nfor (const item of dataToProcess) {\n  const data = item.json;\n  \n  // Description'ı HTML formatına çevir ve newline'ları temizle\n  const descriptionText = (data['Item description'] || data['Description'] || data.ebayDescription || '')\n    .replace(/\\r\\n/g, ' ')\n    .replace(/\\n/g, ' ')\n    .replace(/\\r/g, ' ');\n  const description = `<p>${descriptionText}</p>`;\n  \n  // Fotoğrafları al\n  let photoUrls = data['Item photo URL'] || '';\n  \n  const sku = data['Custom label (SKU)'] || data.sku || '';\n  const categoryId = data['Category ID'] || data.categoryId || '';\n  const title = data['Title'] || data.ebayTitle || '';\n  const price = data['Price'] || data['Start price'] || data.price || '';\n  const quantity = data['Quantity'] || '0';\n  const conditionId = 'NEW';\n  const format = data['Format'] || 'FixedPrice';\n  \n  const dataRow = [\n    'Draft',\n    escapeCSV(sku),\n    escapeCSV(categoryId),\n    escapeCSV(title),\n    '', // UPC\n    escapeCSV(price),\n    escapeCSV(quantity),\n    escapeCSV(photoUrls),\n    conditionId,\n    escapeCSV(description),\n    format\n  ].join(',');\n  \n  rows.push(dataRow);\n}\n\n// Tüm satırları birleştir\nconst fileContent = rows.join('\\n');\n\n// Dosya adı\nconst brandName = $('Code').first().json.brandName;\nconst timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);\nconst fileName = `${brandName}_${timestamp}.csv`;\n\n// Binary olarak döndür\nreturn [{\n  json: { fileName, _debug_itemCount: itemCount, _debug_processedCount: dataToProcess.length },\n  binary: {\n    data: {\n      data: Buffer.from(fileContent, 'utf-8').toString('base64'),\n      mimeType: 'text/csv',\n      fileName: fileName\n    }\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2520,
+        240
+      ],
+      "id": "c400c632-bb53-440b-895a-fb03b24fa89d",
+      "name": "Code9"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Code3'ten gelen TÜM verileri al\nconst allInputData = $input.all();\n\nconst results = [];\n\nfor (const inputItem of allInputData) {\n  const inputData = inputItem.json;\n  \n  // Resim URL'lerini al ve çalışan Google formata çevir\n  const newUrls = [];\n  for (let i = 1; i <= 24; i++) {\n    const url = inputData[`picURL${i}`];\n    if (url && url !== '') {\n      // Google Drive ID'sini al\n      const match = url.match(/id=([a-zA-Z0-9_-]+)/);\n      if (match) {\n        const googleDriveId = match[1];\n        // Çalışan Google URL formatı\n        const newUrl = `https://lh3.googleusercontent.com/d/${googleDriveId}`;\n        newUrls.push(newUrl);\n      }\n    }\n  }\n  \n  results.push({\n    json: {\n      ...inputData,\n      picURL1: newUrls[0] || '',\n      picURL2: newUrls[1] || '',\n      picURL3: newUrls[2] || '',\n      picURL4: newUrls[3] || '',\n      picURL5: newUrls[4] || '',\n      picURL6: newUrls[5] || '',\n      picURL7: newUrls[6] || '',\n      picURL8: newUrls[7] || '',\n      picURL9: newUrls[8] || '',\n      picURL10: newUrls[9] || '',\n      picURL11: newUrls[10] || '',\n      picURL12: newUrls[11] || '',\n      picURL13: newUrls[12] || '',\n      picURL14: newUrls[13] || '',\n      picURL15: newUrls[14] || '',\n      picURL16: newUrls[15] || '',\n      picURL17: newUrls[16] || '',\n      picURL18: newUrls[17] || '',\n      picURL19: newUrls[18] || '',\n      picURL20: newUrls[19] || '',\n      picURL21: newUrls[20] || '',\n      picURL22: newUrls[21] || '',\n      picURL23: newUrls[22] || '',\n      picURL24: newUrls[23] || ''\n    }\n  });\n}\n\nreturn results;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1740,
+        240
+      ],
+      "id": "594c94e8-39ce-4d48-be62-45a4d2b44e07",
+      "name": "Code10"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Code3'ten TÜM SKU bilgilerini al\nconst allSkuData = $('Code3').all();\n\n// Her SKU için bir item döndür\nconst results = allSkuData.map(item => ({\n  json: {\n    skuFolderId: item.json.skuFolderId,\n    partNumber: item.json.partNumber\n  }\n}));\n\nreturn results;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2720,
+        240
+      ],
+      "id": "b3346364-85aa-4953-bc3f-a29b58e73998",
+      "name": "Code11"
+    },
+    {
+      "parameters": {
+        "operation": "createFromText",
+        "content": "={{ new Date().toISOString() }}",
+        "name": "_exported.txt",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "={{ $json.skuFolderId }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        2820,
+        20
+      ],
+      "id": "be287a50-63e7-4b04-8816-52de40cb996c",
+      "name": "Google Drive9",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "ZgWDX2PS5C49Xi8U",
+          "name": "Google Drive account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Google Drive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive": {
+      "main": [
+        [
+          {
+            "node": "Google Drive1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive1": {
+      "main": [
+        [
+          {
+            "node": "Google Drive2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive2": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Google Drive3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive3": {
+      "main": [
+        [
+          {
+            "node": "Filter1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter1": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "Google Drive10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive4": {
+      "main": [
+        [
+          {
+            "node": "Google Drive5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive5": {
+      "main": [
+        [
+          {
+            "node": "Code2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code2": {
+      "main": [
+        [
+          {
+            "node": "Google Drive7",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Google Drive6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive6": {
+      "main": [
+        [
+          {
+            "node": "Filter2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter2": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Google Drive7": {
+      "main": [
+        [
+          {
+            "node": "Filter3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter3": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code3": {
+      "main": [
+        [
+          {
+            "node": "Code10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Code4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code4": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets1": {
+      "main": [
+        [
+          {
+            "node": "Code5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code5": {
+      "main": [
+        [
+          {
+            "node": "OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI": {
+      "main": [
+        [
+          {
+            "node": "Code6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code6": {
+      "main": [
+        [
+          {
+            "node": "Code7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code7": {
+      "main": [
+        [
+          {
+            "node": "Code9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Code3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive8": {
+      "main": [
+        [
+          {
+            "node": "Code11",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive10": {
+      "main": [
+        [
+          {
+            "node": "Code8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code8": {
+      "main": [
+        [
+          {
+            "node": "Google Drive4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code9": {
+      "main": [
+        [
+          {
+            "node": "Google Drive8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code10": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code11": {
+      "main": [
+        [
+          {
+            "node": "Google Drive9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "ec3781ce-96a9-4cfd-8e9e-dba6c12e9adb",
+  "meta": {
+    "instanceId": "78114adaf2e6cef040b2565ba961fcd09f48c55c538198c1e0a5492d7529d19f"
+  },
+  "id": "vsG1ce0PWFv2uP9y",
+  "tags": []
+}
